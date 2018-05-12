@@ -6,6 +6,7 @@ import picamera
 import time
 import requests
 import json
+import sys
 
 np.set_printoptions(threshold='nan')
 
@@ -34,33 +35,14 @@ def take_photo():
         #   if cv2.waitKey(33) >= 0:
         #     break;
         # cv2.destroyAllWindows()
-        print  json.dumps([y/12.,x/16.])
-
-
+        return json.dumps([y/12.,x/16.]);
 
 def send():
   image = open ('./img.png', 'rb')
   files = {'image':('img.png', image,'image/png')}
   data = {'temperature': 32}
   r = requests.post('http://ec2-18-191-25-206.us-east-2.compute.amazonaws.com:3000/entry',files=files,data=data)
-  # print r.text
 
-
-
-# def test1():
-#     output = cv2.imread('./filename.jpg')
-#     output = cv2.resize(output,(24,32))
-#     #output = output.reshape((240,320,3))
-#     hsv_color = cv2.cvtColor(output, cv2.COLOR_BGR2HSV)
-#     mask = cv2.inRange(hsv_color, np.array([120,100,50]), np.array([200,250,180]))
-#     # print hsv_color[ hsv_color[:,:,1] > 50 ]
-#     res = cv2.bitwise_and(output,output,mask=mask);
-#     cv2.imshow("cap", res);
-#     while True :
-#       if cv2.waitKey(33) >= 0:
-#         break;
-#     cv2.destroyAllWindows()
-
-
-take_photo();
-# send();
+result = take_photo();
+send();
+sys.stdout.write(result.encode("utf-8"));
