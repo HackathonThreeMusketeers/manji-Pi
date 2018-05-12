@@ -3,6 +3,7 @@ import sys
 import signal
 import speak_audio
 import recognition
+import control_led
 
 interrupted = False
 
@@ -17,13 +18,14 @@ def interrupt_callback():
     return interrupted
 
 def speak():
+    control_led.listening()
     text = recognition.check_mic_works()
     index = text.find("OK")
     if index != -1:
         speak_audio.speak("fuck you")
     else:
         speak_audio.speak("not found")
-
+    control_led.stopping()
 model = "model.pmdl"
 
 # capture SIGINT signal, e.g., Ctrl+C
