@@ -10,7 +10,7 @@ import aiy.audio
 from aiy._drivers._hat import get_aiy_device_name
 import speech_recognition
 
-RECORD_DURATION_SECONDS = 5
+RECORD_DURATION_SECONDS = 3
 
 def check_mic_works():
     """Check the microphone records correctly."""

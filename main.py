@@ -19,7 +19,13 @@ def take_photo():
         camera.capture(output, 'bgr')
         output = output.reshape((128,160,3))
         hsv_color = cv2.cvtColor(output, cv2.COLOR_BGR2HSV)
+        #cv2.imshow("cap", hsv_color);
+        #while True :
+        #    if cv2.waitKey(33) >= 0:
+        #        break;
+        #cv2.destroyAllWindows()
         mask = cv2.inRange(hsv_color, np.array([128,100,50]), np.array([200,250,180]))
+        #mask = cv2.inRange(hsv_color, np.array([126,200,5]), np.array([220,260,20]))  
         cv2.imwrite('img.png',output);
         cv2.imwrite('mask.png',mask);
 
@@ -28,13 +34,10 @@ def take_photo():
         cv2.imwrite('res.png',output);
         # print np.where(img > 200), "::end::"
         y,x = np.where(img > 200)
+        if len(y) == 0: 
+           return json.dumps([.1,.1])
         y = y[len(y)/2]
         x = x[len(x)/2]
-        # cv2.imshow("cap", img);
-        # while True :
-        #   if cv2.waitKey(33) >= 0:
-        #     break;
-        # cv2.destroyAllWindows()
         return json.dumps([y/12.,x/16.]);
 
 def send():
@@ -42,7 +45,12 @@ def send():
   files = {'image':('img.png', image,'image/png')}
   data = {'temperature': 32}
   r = requests.post('http://ec2-18-191-25-206.us-east-2.compute.amazonaws.com:3000/entry',files=files,data=data)
-
+  
+  
+  
+  
 result = take_photo();
 send();
 sys.stdout.write(result.encode("utf-8"));
+
+

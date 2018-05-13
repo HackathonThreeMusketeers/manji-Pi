@@ -4,6 +4,7 @@ import signal
 import speak_audio
 import recognition
 import control_led
+import manji_camera4p3
 
 interrupted = False
 
@@ -20,23 +21,35 @@ def interrupt_callback():
 def speak():
     control_led.listening()
     text = recognition.check_mic_works()
-    index = text.find("OK")
+    index = text.find("ご飯")
     if index != -1:
-        speak_audio.speak("fuck you")
+        speak_audio.speak("わかったにゃぁぁ")
+        manji_camera4p3.Move_Servo()
+
+        y, x = manji_camera4p3.ManjiCamera4p3()
+        
+        if y >= 0.6:
+            speak_audio.speak("美味しいにゃぁぁぁ")
+        else:
+            speak_audio.speak("やっぱ，いらないにゃぁぁ")
+
     else:
-        speak_audio.speak("not found")
+        speak_audio.speak("何を言ってるかわからないにゃぁぁ")
     control_led.stopping()
-model = "model.pmdl"
 
-# capture SIGINT signal, e.g., Ctrl+C
-signal.signal(signal.SIGINT, signal_handler)
+if __name__ == '__main__':
+   
+    model = "model.pmdl"
 
-detector = snowboydecoder.HotwordDetector(model, sensitivity=0.5)
-print('Listening... Press Ctrl+C to exit')
+    # capture SIGINT signal, e.g., Ctrl+C
+    signal.signal(signal.SIGINT, signal_handler)
 
-# main loop
-detector.start(detected_callback=speak,
-               interrupt_check=interrupt_callback,
-               sleep_time=0.03)
+    detector = snowboydecoder.HotwordDetector(model, sensitivity=0.5)
+    print('Listening... Press Ctrl+C to exit')
+    control_led.ready()
+    # main loop
+    detector.start(detected_callback=speak,
+                interrupt_check=interrupt_callback,
+                sleep_time=0.03)
 
-detector.terminate()
+    detector.terminate()
