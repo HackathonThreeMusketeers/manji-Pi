@@ -20,21 +20,13 @@ def interrupt_callback():
 
 def speak():
     control_led.listening()
-    text = recognition.check_mic_works()
+    text = recognition.get_speech_text()
     index = text.find("ご飯")
     if index != -1:
-        speak_audio.speak("わかったにゃぁぁ")
-        manji_camera4p3.Move_Servo()
-
-        y, x = manji_camera4p3.ManjiCamera4p3()
-        
-        if y >= 0.6:
-            speak_audio.speak("美味しいにゃぁぁぁ")
-        else:
-            speak_audio.speak("やっぱ，いらないにゃぁぁ")
+        speak_audio.speak("わかった")
 
     else:
-        speak_audio.speak("何を言ってるかわからないにゃぁぁ")
+        speak_audio.speak("何を言ってるかわからない")
     control_led.stopping()
 
 if __name__ == '__main__':
