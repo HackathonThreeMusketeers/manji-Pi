@@ -45,7 +45,6 @@ def speech_to_text():
     with speech_recognition.AudioFile(WAVE_OUTPUT_FILENAME) as source:
         audio = r.record(source)
         result = r.recognize_google(audio, language='ja-JP')
-
     return result
 
 def get_speech_text():
